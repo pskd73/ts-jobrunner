@@ -1,0 +1,15 @@
+{
+  "name": "ts-jobrunner",
+  "version": "1.0.0",
+  "description": "A JobRunner for Typescript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Pramod Kumar",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "uniqid": "^4.1.1"
+  }
+}
