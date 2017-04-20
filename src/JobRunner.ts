@@ -13,7 +13,7 @@ class JobRunner implements JobRunnerContracts {
     private queCompletedPointer: number = -1
     private isStarted: boolean = false
 
-    constructor(concurrentJobs) {
+    constructor(concurrentJobs: number) {
         this.concurrentJobs = concurrentJobs;
         for(var i=0;i<this.concurrentJobs;i++){
             this.pipe[i] = null;
