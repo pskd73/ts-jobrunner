@@ -1,22 +1,20 @@
 {
     "compilerOptions": {
         "baseUrl": ".",
-        "rootDirs": ["app"],
+        "rootDirs": ["lib"],
         "paths": {
             "app/*": ["./*"]
         },
         "noResolve": false,
-        "moduleResolution": "node",
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        "outDir": "app",
+        "outDir": "lib",
         "sourceMap": true,
+        "declaration": true,
         "lib": [
             "ES2016",
             "dom"
-        ],
-        "watch": true,
-        "types": ["node"]
+        ]
     },
     "include": [
         "./**/*"
