@@ -3,6 +3,9 @@ A Job Runner library for javascript/typescript
 
 This library comes handy when you want to run jobs concurrently, with having buffer limit. This library is written on TypeScript but it can be used on plain javascript too. It comes with type defination out of the box.
 
+## Installation
+```npm install --save ts-jobrunner```
+
 ## Core API
 ```
 CoreJob (abstract class)
