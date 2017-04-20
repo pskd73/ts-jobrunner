@@ -1,9 +1,9 @@
-import CoreJob from '../CoreJob';
+import CoreJob from "../CoreJob";
 
-interface JobRunnerContracts {
-    add(list: Array<CoreJob>|CoreJob): void
-    getPendingJobs(): number
-    start(): void
+interface IJobRunnerContracts {
+    add(list: CoreJob[]|CoreJob): void;
+    getPendingJobs(): number;
+    start(): void;
 }
 
-export default JobRunnerContracts;
+export default IJobRunnerContracts;

@@ -1,6 +1,6 @@
-interface JobResponse {
-    status: boolean,
-    response: any,
+interface IJobResponse {
+    status: boolean;
+    response: any;
 }
 
-export default JobResponse;
+export default IJobResponse;

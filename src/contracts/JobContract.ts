@@ -1,10 +1,10 @@
-import JobResponse from './JobResponse';
+import JobResponse from "./JobResponse";
 
-interface JobContract {
-    id: number
-    startTime: Date
-    endTime: Date
-    handle(): Promise<JobResponse>
+interface IJobContract {
+    id: number;
+    startTime: Date;
+    endTime: Date;
+    handle(): Promise<JobResponse>;
 }
 
-export default JobContract;
+export default IJobContract;

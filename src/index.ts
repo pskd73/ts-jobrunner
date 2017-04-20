@@ -1,7 +1,7 @@
-import CoreJob from './CoreJob';
-import JobRunner from './JobRunner';
+import CoreJob from "./CoreJob";
+import JobRunner from "./JobRunner";
 
 export {
     JobRunner,
-    CoreJob
+    CoreJob,
 };

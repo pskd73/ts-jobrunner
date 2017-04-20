@@ -1,6 +1,6 @@
-interface PriorityElement {
-    priority: number
-    index: number
+interface IPriorityElement {
+    priority: number;
+    index: number;
 }
 
-export default PriorityElement;
+export default IPriorityElement;

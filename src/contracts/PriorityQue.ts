@@ -1,9 +1,9 @@
-import CoreJob from '../CoreJob';
+import CoreJob from "../CoreJob";
 
-interface PriorityQue {
-    priority: number
-    que: Array<CoreJob>
-    index: number
+interface IPriorityQue {
+    priority: number;
+    que: CoreJob[];
+    index: number;
 }
 
-export default PriorityQue;
+export default IPriorityQue;

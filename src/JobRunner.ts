@@ -1,33 +1,75 @@
-import CoreJob from './CoreJob';
-import JobDescription from './contracts/JobDescription';
-import PriorityQue from './contracts/PriorityQue';
-import PriorityElement from './contracts/PriorityElement';
-import JobRunnerContracts from './contracts/JobRunnerContracts';
-import * as Lodash from 'lodash';
+import * as Lodash from "lodash";
+import JobDescription from "./contracts/JobDescription";
+import JobRunnerContracts from "./contracts/JobRunnerContracts";
+import PriorityElement from "./contracts/PriorityElement";
+import PriorityQue from "./contracts/PriorityQue";
+import CoreJob from "./CoreJob";
 
 class JobRunner implements JobRunnerContracts {
 
-    private que: Array<PriorityQue> = []
-    private pipe: Array<CoreJob> = []
-    private concurrentJobs: number
-    private queCompletedPointer: number = -1
-    private isStarted: boolean = false
+    private que: PriorityQue[] = [];
+    private pipe: CoreJob[] = [];
+    private concurrentJobs: number;
+    private queCompletedPointer: number = -1;
+    private isStarted: boolean = false;
 
     constructor(concurrentJobs: number) {
         this.concurrentJobs = concurrentJobs;
-        for(var i=0;i<this.concurrentJobs;i++){
+        for (let i = 0; i < this.concurrentJobs; i++) {
             this.pipe[i] = null;
         }
     }
 
-    private getPriorites(): Array<number> {
+    public getPipe() {
+        return this.pipe;
+    }
+
+    public getPendingJobs() {
+        return this.que.length - this.queCompletedPointer;
+    }
+
+    public getQue() {
+        return this.que;
+    }
+
+    public add(list: CoreJob[]|CoreJob) {
+        if (!Array.isArray(list)) {
+            list = [list];
+        }
+        for (const job of list) {
+            const priority = job.priority;
+            let queSet = this.getQueByPriority(priority);
+            if (!queSet) {
+                queSet = {
+                    index: -1,
+                    priority,
+                    que: [],
+                };
+                this.que.push(queSet);
+            }
+            queSet.que.push(job);
+        }
+        if (this.isStarted) {
+            this.appendJobs();
+        }
+    }
+
+    public start() {
+        this.isStarted = true;
+        this.appendJobs();
+    }
+
+    public next() {
+        this.appendSingleJob();
+    }
+
+    private getPriorites(): number[] {
         return Lodash.map(this.que, (priorityQ) => priorityQ.priority);
     }
 
     private getQueByPriority(priority: number): PriorityQue {
-        for(var i=0;i<this.que.length;i++){
-            const currentQueSet = this.que[i];
-            if(currentQueSet.priority == priority){
+        for (const currentQueSet of this.que) {
+            if (currentQueSet.priority === priority) {
                 return currentQueSet;
             }
         }
@@ -36,27 +78,26 @@ class JobRunner implements JobRunnerContracts {
 
     private executePipeJob(pipeIndex): void {
         const job = this.pipe[pipeIndex];
-        ((pipeIndex) => {
+        ((index) => {
             job.handle()
                 .then(() => {
-                    this.pipe[pipeIndex] = null;
-                    if(this.isStarted){
+                    this.pipe[index] = null;
+                    if (this.isStarted) {
                         this.appendJobs();
                     }
                 });
         })(pipeIndex);
     }
 
-    private getSortedPriorities(): Array<PriorityQue> {
+    private getSortedPriorities(): PriorityQue[] {
         return Lodash.sortBy(this.que, [(qs) => qs.priority]).reverse();
     }
 
     private getNextJob(): CoreJob {
         const priorities = this.getSortedPriorities();
-        for(var i=0;i<priorities.length;i++){
-            const prioritySet = priorities[i];
+        for (const prioritySet of priorities) {
             const nextIndex = prioritySet.index + 1;
-            if(nextIndex < prioritySet.que.length){
+            if (nextIndex < prioritySet.que.length) {
                 prioritySet.index = nextIndex;
                 return prioritySet.que[prioritySet.index];
             }
@@ -67,27 +108,27 @@ class JobRunner implements JobRunnerContracts {
     private fetchNextQueElement(pipeIndex): boolean {
         const nextJob = this.getNextJob();
         let executed = false;
-        if(nextJob){
+        if (nextJob) {
             this.pipe[pipeIndex] = nextJob;
             this.executePipeJob(pipeIndex);
             executed = true;
-        }else{
+        } else {
             this.pipe[pipeIndex] = null;
         }
         return executed;
     }
 
     private appendJobs() {
-        for(var i=0;i<this.concurrentJobs;i++){
-            if(this.pipe[i] === null){
+        for (let i = 0; i < this.concurrentJobs; i++) {
+            if (this.pipe[i] === null) {
                 this.fetchNextQueElement(i);
             }
         }
     }
 
     private appendSingleJob() {
-        for(var i=0;i<this.concurrentJobs;i++){
-            if(this.pipe[i] === null){
+        for (let i = 0; i < this.concurrentJobs; i++) {
+            if (this.pipe[i] === null) {
                 this.fetchNextQueElement(i);
                 break;
             }
@@ -98,49 +139,6 @@ class JobRunner implements JobRunnerContracts {
         return Lodash.every(this.pipe, (job) => job === null);
     }
 
-    getPipe() {
-        return this.pipe;
-    }
-
-    getPendingJobs(){
-        return this.que.length - this.queCompletedPointer;
-    }
-
-    getQue(){
-        return this.que;
-    }
-
-    add(list) {
-        if(!Array.isArray(list)){
-            list = [list];
-        }
-        for(var i=0;i<list.length;i++){
-            const job = list[i];
-            const priority = job.priority;
-            let queSet = this.getQueByPriority(priority);
-            if(!queSet){
-                queSet = {
-                    priority,
-                    que: [],
-                    index: -1
-                };
-                this.que.push(queSet);
-            }
-            queSet.que.push(job);
-        }
-        if(this.isStarted){
-            this.appendJobs();
-        }
-    }
-
-    start(){
-        this.isStarted = true;
-        this.appendJobs();
-    }
-
-    next(){
-        this.appendSingleJob();
-    }
 }
 
 export default JobRunner;

@@ -1,9 +1,9 @@
-import CoreJob from '../CoreJob';
+import CoreJob from "../CoreJob";
 
-interface JobDescription {
-    job: CoreJob,
-    pipeIndex: number,
-    queIndex: number
+interface IJobDescription {
+    job: CoreJob;
+    pipeIndex: number;
+    queIndex: number;
 }
 
-export default JobDescription;
+export default IJobDescription;

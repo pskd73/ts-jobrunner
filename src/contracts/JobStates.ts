@@ -1,7 +1,7 @@
 enum JobStates {
     PENDING,
     RUNNING,
-    COMPLETED
+    COMPLETED,
 }
 
 export default JobStates;
