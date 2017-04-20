@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "moduleResolution": "node",
         "baseUrl": ".",
         "rootDirs": ["lib"],
         "paths": {
@@ -10,14 +11,13 @@
         "experimentalDecorators": true,
         "outDir": "lib",
         "sourceMap": true,
-        "declaration": true,
         "lib": [
             "ES2016",
             "dom"
         ]
     },
     "include": [
-        "./**/*"
+        "./src/**/*"
     ],
     "exclude": [
         "node_modules",

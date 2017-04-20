@@ -14,12 +14,12 @@ abstract class CoreJob implements JobContract {
 
     constructor() {
         this.id = uniqid();
-        this.startTime = new Date();
         this.state = JobStates.PENDING;
     }
 
     public async handle() {
         this.state = JobStates.RUNNING;
+        this.startTime = new Date();
         this.response = await this.run();
         this.endTime = new Date();
         this.state = JobStates.COMPLETED;
