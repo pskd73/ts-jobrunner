@@ -1,33 +1,33 @@
-import 'mocha';
-import { expect } from 'chai';
-import CoreJob from '../CoreJob';
-import JobStates from '../contracts/JobStates';
-import TestJob from './testjob';
+import { expect } from "chai";
+import "mocha";
+import JobStates from "../contracts/JobStates";
+import CoreJob from "../CoreJob";
+import TestJob from "./testjob";
 
-describe("CoreJob", function(){
+describe ("CoreJob", () => {
     const job = new TestJob();
 
-    it("should create a job", function(){
-        expect(job).to.be.ok;
+    it ("should create a job", () => {
+        return expect(job).to.be.ok;
     });
 
-    it("should have pending state", function(){
+    it ("should have pending state", () => {
         expect(job.state).to.equal(JobStates.PENDING);
     });
 
-    it("should run job", function(done){
+    it ("should run job", (done) => {
         job.handle()
-            .then(response => {
-                expect(response.status).to.be.ok;
+            .then((response) => {
+                const status = expect(response.status).to.be.ok;
                 done();
             });
     });
 
-    it("should have completed state", function(){
+    it ("should have completed state", () => {
         expect(job.state).to.equal(JobStates.COMPLETED);
     });
 
-    it("should give time difference", function(){
+    it ("should give time difference", () => {
         expect(job.endTime - job.startTime).to.greaterThan(200).lessThan(210);
     });
 });
